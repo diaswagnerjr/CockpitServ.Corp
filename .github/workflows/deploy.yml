@@ -22,9 +22,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - name: Prepare static site
+        run: |
+          mkdir -p site
+          cp index.html site/index.html
+          touch site/.nojekyll
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
         with:
-          path: .
+          enablement: true
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
       - id: deployment
+        name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
